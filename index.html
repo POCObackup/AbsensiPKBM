@@ -9,136 +9,88 @@
 
   <style>
     html, body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  overflow-x: hidden;
-  font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg, #e3f2fd, #f5f7fa);
-  text-align: center;
-}
-  body > div {
-  margin: 0 !important;
-  padding: 0 !important;
-}
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #e3f2fd, #f5f7fa);
+      text-align: center;
+    }
 
-/* CONTAINER */
-.container {
-  width: 100%;
-  min-height: 100vh;
-  padding: 20px;
-  box-sizing: border-box;
-}
+    .container {
+      width: 100%;
+      min-height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
+    }
 
-/* JUDUL */
-h1 {
-  font-size: 32px;
-  margin: 25px 0;
-  font-weight: 600;
-}
+    h1 {
+      font-size: 28px;
+      margin: 20px 0;
+    }
 
-/* LIST */
-#listNama {
-  width: 100%;
-}
+    .nama {
+      width: 100%;
+      background: #dcdcdc;
+      padding: 20px;
+      margin: 10px 0;
+      border-radius: 12px;
+      font-size: 20px;
+      cursor: pointer;
+    }
 
-/* CARD */
-.nama {
-  width: 100%;
-  background: #dcdcdc;
-  padding: 22px;
-  margin: 12px 0;
-  border-radius: 14px;
-  font-size: 22px; /* DIBESARKAN */
-  cursor: pointer;
-  transition: all 0.2s ease;
-  min-height: 65px; /* BIAR BESAR DI HP */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+    .masuk { background: #a5d6a7 !important; }
+    .pulang { background: #90caf9 !important; }
 
-.nama:active {
-  transform: scale(0.96);
-}
+    #popup {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
 
-/* STATUS */
-.masuk {
-  background: #a5d6a7 !important;
-}
+    .popup-box {
+      width: 90%;
+      max-width: 320px;
+      background: #fff;
+      padding: 25px;
+      border-radius: 16px;
+    }
 
-.pulang {
-  background: #90caf9 !important;
-}
+    .jam {
+      font-size: 28px;
+      font-weight: bold;
+    }
 
-/* POPUP */
-#popup {
-  display: none;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.6);
-  justify-content: center;
-  align-items: center;
-}
+    .btn {
+      width: 100%;
+      padding: 14px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+    }
 
-.popup-box {
-  width: 92%;
-  max-width: 350px;
-  background: linear-gradient(135deg, #ffffff, #f1f8ff);
-  padding: 28px;
-  border-radius: 18px;
-  text-align: center;
-  animation: fadeIn 0.2s ease;
-}
-
-/* TEKS POPUP */
-#namaPopup {
-  font-size: 24px;
-}
-
-#tanggalPopup {
-  font-size: 18px;
-}
-
-.jam {
-  font-size: 34px;
-}
-
-/* BUTTON */
-.btn {
-  width: 100%;
-  padding: 16px;
-  margin-top: 12px;
-  border: none;
-  border-radius: 10px;
-  font-size: 18px; /* DIBESARKAN */
-  font-weight: 600;
-  min-height: 55px; /* BIAR MUDAH DI TAP */
-}
-
-.btn-masuk { background: #4CAF50; color: white; }
-.btn-pulang { background: #2196F3; color: white; }
-.btn-batal { background: #ddd; }nd: #ddd; }
-
+    .btn-masuk { background: #4CAF50; color: white; }
+    .btn-pulang { background: #2196F3; color: white; }
+    .btn-batal { background: #ddd; }
   </style>
 </head>
 
 <body>
 
 <div class="container">
-
   <h1>ABSENSI KARYAWAN</h1>
-
   <div id="listNama">Loading...</div>
-
 </div>
 
-<!-- POPUP -->
 <div id="popup">
   <div class="popup-box">
-
     <h3 id="namaPopup"></h3>
     <p id="tanggalPopup"></p>
     <div class="jam" id="jamPopup"></div>
@@ -146,85 +98,85 @@ h1 {
     <button class="btn btn-masuk" onclick="pilihAbsen('Masuk')">Masuk</button>
     <button class="btn btn-pulang" onclick="pilihAbsen('Pulang')">Pulang</button>
     <button class="btn btn-batal" onclick="tutupPopup()">Batal</button>
-
   </div>
 </div>
 
 <script>
+const URL_API = "https://script.google.com/macros/s/AKfycby846bgrKt1ycGxcs2zwFcp8k7vx5H1QgL0-BcWlrsb4_FiZFYuu2QALvyAztD9qp5MJA/exec";
+
 function loadKaryawan() {
+  fetch(URL_API)
+    .then(res => res.json())
+    .then(data => {
+      let container = document.getElementById("listNama");
+      container.innerHTML = "";
 
- fetch("https://script.google.com/macros/s/AKfycby846bgrKt1ycGxcs2zwFcp8k7vx5H1QgL0-BcWlrsb4_FiZFYuu2QALvyAztD9qp5MJA/exec")
-  .then(res => res.json())
-  .then(function(data) {
+      data.forEach(nama => {
+        let div = document.createElement("div");
+        div.className = "nama";
+        div.innerText = nama;
 
-    var container = document.getElementById("listNama");
-    container.innerHTML = "";
+        div.onclick = () => bukaPopup(nama, div);
 
-    data.forEach(function(nama) {
-
-      var div = document.createElement("div");
-      div.className = "nama";
-      div.innerText = nama;
-
-      div.onclick = function() {
-        bukaPopup(nama, div);
-      };
-
-      container.appendChild(div);
+        container.appendChild(div);
+      });
+    })
+    .catch(err => {
+      document.getElementById("listNama").innerText = "Gagal load data";
+      console.error(err);
     });
-
-  }).getKaryawan();
 }
 
 window.onload = loadKaryawan;
 
-var namaDipilih = "";
-var divDipilih = null;
-
-function updateJam() {
-  var now = new Date();
-
-  var jam = now.toLocaleTimeString();
-  var tanggal = now.toLocaleDateString("id-ID", {
-    day: "numeric",
-    month: "long",
-    year: "numeric"
-  });
-
-  document.getElementById("tanggalPopup").innerText = tanggal;
-  document.getElementById("jamPopup").innerText = jam;
-}
+let namaDipilih = "";
+let divDipilih = null;
 
 function bukaPopup(nama, div) {
   namaDipilih = nama;
   divDipilih = div;
 
   document.getElementById("namaPopup").innerText = nama;
-
   updateJam();
-  window.jamInterval = setInterval(updateJam, 1000);
 
+  window.jamInterval = setInterval(updateJam, 1000);
   document.getElementById("popup").style.display = "flex";
+}
+
+function updateJam() {
+  let now = new Date();
+
+  document.getElementById("tanggalPopup").innerText =
+    now.toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" });
+
+  document.getElementById("jamPopup").innerText =
+    now.toLocaleTimeString();
 }
 
 function pilihAbsen(tipe) {
 
-  fetch("https://script.google.com/macros/s/AKfycby846bgrKt1ycGxcs2zwFcp8k7vx5H1QgL0-BcWlrsb4_FiZFYuu2QALvyAztD9qp5MJA/exec", {
-  method: "POST",
-  body: JSON.stringify({
-    nama: namaDipilih,
-    tipe: tipe
+  alert("Kirim: " + namaDipilih + " - " + tipe); // TEST
+
+  fetch(URL_API, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      nama: namaDipilih,
+      tipe: tipe
+    })
   })
-})
-.then(res => res.json())
-.then(res => {
-  console.log("Sukses:", res);
-});
+  .then(res => res.text())
+  .then(() => {
+    alert("Absensi berhasil");
+  })
+  .catch(err => {
+    alert("Error: " + err);
+  });
 
   if (divDipilih) {
-    if (tipe === "Masuk") {
-      divDipilih.classList.add("masuk");
-    }
+    if (tipe === "Masuk") divDipilih.classList.add("masuk");
     if (tipe === "Pulang") {
       divDipilih.classList.remove("masuk");
       divDipilih.classList.add("pulang");
