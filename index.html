@@ -155,25 +155,19 @@ function updateJam() {
 
 function pilihAbsen(tipe) {
 
-  alert("Kirim: " + namaDipilih + " - " + tipe); // TEST
-
   fetch(URL_API, {
     method: "POST",
+    mode: "no-cors", // 🔥 WAJIB
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "text/plain;charset=utf-8" // 🔥 WAJIB
     },
     body: JSON.stringify({
       nama: namaDipilih,
       tipe: tipe
     })
-  })
-  .then(res => res.text())
-  .then(() => {
-    alert("Absensi berhasil");
-  })
-  .catch(err => {
-    alert("Error: " + err);
   });
+
+  alert("Absensi terkirim"); // langsung kasih respon
 
   if (divDipilih) {
     if (tipe === "Masuk") divDipilih.classList.add("masuk");
